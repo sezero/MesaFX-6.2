@@ -5,9 +5,9 @@
 
 /*
  * Mesa 3-D graphics library
- * Version:  6.2
+ * Version:  6.2.2
  *
- * Copyright (C) 1999-2004  Brian Paul   All Rights Reserved.
+ * Copyright (C) 1999-2005  Brian Paul   All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -691,10 +691,10 @@ _mesa_GetBooleanv( GLenum pname, GLboolean *params )
 	 *params = ctx->Pack.SwapBytes;
 	 break;
       case GL_PACK_SKIP_IMAGES_EXT:
-         *params = ctx->Pack.SkipImages;
+         *params = INT_TO_BOOL(ctx->Pack.SkipImages);
          break;
       case GL_PACK_IMAGE_HEIGHT_EXT:
-         *params = ctx->Pack.ImageHeight;
+         *params = INT_TO_BOOL(ctx->Pack.ImageHeight);
          break;
       case GL_PACK_INVERT_MESA:
          *params = ctx->Pack.Invert;
@@ -1247,7 +1247,7 @@ _mesa_GetBooleanv( GLenum pname, GLboolean *params )
          break;
       case GL_POST_CONVOLUTION_ALPHA_BIAS_EXT:
          CHECK_EXTENSION_B(EXT_convolution, pname);
-         *params = FLOAT_TO_BOOL(ctx->Pixel.PostConvolutionBias[2]);
+         *params = FLOAT_TO_BOOL(ctx->Pixel.PostConvolutionBias[3]);
          break;
 
       /* GL_EXT_histogram (also in 1.2 imaging) */
@@ -1526,8 +1526,8 @@ _mesa_GetBooleanv( GLenum pname, GLboolean *params )
          break;
       case GL_FRAGMENT_PROGRAM_BINDING_NV:
          CHECK_EXTENSION_B(NV_fragment_program, pname);
-         if (ctx->VertexProgram.Current &&
-             ctx->VertexProgram.Current->Base.Id != 0)
+         if (ctx->FragmentProgram.Current &&
+             ctx->FragmentProgram.Current->Base.Id != 0)
             *params = GL_TRUE;
          else
             *params = GL_FALSE;
@@ -2811,7 +2811,7 @@ _mesa_GetDoublev( GLenum pname, GLdouble *params )
          break;
       case GL_POST_CONVOLUTION_ALPHA_BIAS_EXT:
          CHECK_EXTENSION_D(EXT_convolution, pname);
-         *params = (GLdouble) ctx->Pixel.PostConvolutionBias[2];
+         *params = (GLdouble) ctx->Pixel.PostConvolutionBias[3];
          break;
 
       /* GL_EXT_histogram (also in 1.2 imaging) */
@@ -4349,7 +4349,7 @@ _mesa_GetFloatv( GLenum pname, GLfloat *params )
          break;
       case GL_POST_CONVOLUTION_ALPHA_BIAS_EXT:
          CHECK_EXTENSION_F(EXT_convolution, pname);
-         *params = ctx->Pixel.PostConvolutionBias[2];
+         *params = ctx->Pixel.PostConvolutionBias[3];
          break;
 
       /* GL_EXT_histogram (also in 1.2 imaging) */
@@ -5922,7 +5922,7 @@ _mesa_GetIntegerv( GLenum pname, GLint *params )
          break;
       case GL_POST_CONVOLUTION_ALPHA_BIAS_EXT:
          CHECK_EXTENSION_I(EXT_convolution, pname);
-         *params = (GLint) ctx->Pixel.PostConvolutionBias[2];
+         *params = (GLint) ctx->Pixel.PostConvolutionBias[3];
          break;
 
       /* GL_EXT_histogram (also in 1.2 imaging) */

@@ -5,7 +5,7 @@
 
 /*
  * Mesa 3-D graphics library
- * Version:  6.2
+ * Version:  6.2.2
  *
  * Copyright (C) 1999-2004  Brian Paul   All Rights Reserved.
  *
@@ -617,6 +617,7 @@ _mesa_GenTextures( GLsizei n, GLuint *textures )
       GLenum target = 0;
       texObj = (*ctx->Driver.NewTextureObject)( ctx, name, target);
       if (!texObj) {
+         _glthread_UNLOCK_MUTEX(GenTexturesLock);
          _mesa_error(ctx, GL_OUT_OF_MEMORY, "glGenTextures");
          return;
       }
@@ -1021,9 +1022,18 @@ _mesa_AreTexturesResident(GLsizei n, const GLuint *texName,
 GLboolean GLAPIENTRY
 _mesa_IsTexture( GLuint texture )
 {
+   struct gl_texture_object *t;
    GET_CURRENT_CONTEXT(ctx);
    ASSERT_OUTSIDE_BEGIN_END_WITH_RETVAL(ctx, GL_FALSE);
-   return texture > 0 && _mesa_HashLookup(ctx->Shared->TexObjects, texture);
+
+   if (!texture)
+      return GL_FALSE;
+
+   t = (struct gl_texture_object *)
+      _mesa_HashLookup(ctx->Shared->TexObjects, texture);
+
+   /* IsTexture is true only after object has been bound once. */
+   return t && t->Target;
 }
 
 /*@}*/

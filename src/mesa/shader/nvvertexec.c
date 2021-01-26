@@ -1,6 +1,6 @@
 /*
  * Mesa 3-D graphics library
- * Version:  6.1
+ * Version:  6.2.2
  *
  * Copyright (C) 1999-2004  Brian Paul   All Rights Reserved.
  *
@@ -412,20 +412,15 @@ _mesa_exec_vertex_program(GLcontext *ctx, const struct vertex_program *program)
             break;
          case VP_OPCODE_LIT:
             {
-               const GLfloat epsilon = 1.0e-5F; /* XXX fix? */
+               const GLfloat epsilon = 1.0F / 256.0F; /* per NV spec */
                GLfloat t[4], lit[4];
                fetch_vector4( &inst->SrcReg[0], state, t );
-               if (t[3] < -(128.0F - epsilon))
-                   t[3] = - (128.0F - epsilon);
-               else if (t[3] > 128.0F - epsilon)
-                  t[3] = 128.0F - epsilon;
-               if (t[0] < 0.0)
-                  t[0] = 0.0;
-               if (t[1] < 0.0)
-                  t[1] = 0.0;
+               t[0] = MAX2(t[0], 0.0F);
+               t[1] = MAX2(t[1], 0.0F);
+               t[3] = CLAMP(t[3], -(128.0F - epsilon), (128.0F - epsilon));
                lit[0] = 1.0;
                lit[1] = t[0];
-               lit[2] = (t[0] > 0.0) ? (GLfloat) exp(t[3] * log(t[1])) : 0.0F;
+               lit[2] = (t[0] > 0.0) ? (GLfloat) _mesa_pow(t[1], t[3]) : 0.0F;
                lit[3] = 1.0;
                store_vector4( &inst->DstReg, state, lit );
             }
