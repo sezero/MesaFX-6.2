@@ -1,0 +1,108 @@
+File: docs/README.WIN32
+
+Last updated: Oct 01, 2004 - Karl Schultz - kschultz@users.sourceforge.net
+
+Quick Start
+
+Unzip both ZIP files (MesaLib and MesaDemos) into the same directory.
+The libs and demos build separately, so if you do not care about the
+demos, you do not have to unzip that zip file.  But if you do, it does
+need to be unzipped into the same directory as the lib zip file because
+the demos depend on the libs.
+
+The build system has been changed to use Microsoft Visual Studio project
+workspaces and projects.  Makefiles are no longer shipped or supported, but
+can be generated from the projects using Visual Studio.
+
+The workspace and project files were created with Visual Studio 6, so that
+they can be used with VS6 and so that they can also be imported into VS 7.
+
+Details and Notes
+
+- To build the Mesa libraries, open the Mesa.dsw workspace file
+  in the top directory.  You will need to build at least one
+  driver.  Currently, only the gdi and osmesa drivers are available.
+  Select one or the other as the active project and build it.
+  If you want glu, select the glu project as active and build that as well.
+
+- Glut is no longer in the Mesa.dsw workspace.  It is now built in
+  the demo workspace (see below).
+  
+- The build process will create a lib directory in the top directory 
+  and will put the following files there as you build them:
+	OPENGL32.LIB, GLU32.LIB, OSMESA32.LIB
+	OPENGL32.DLL, GLU32.DLL, OSMESA32.DLL
+
+- Some users have reported problems building glu with VS7 after importing
+  and converting the VS6 project files.  The problem is caused by a custom
+  build step that was put in place to work around a problem with VS6 not
+  recognizing .cc files as C++ source files.  It appears that VS7 can be
+  configured to recognize .cc files as C++ files and so it compiles these
+  glu files with the default settings, and does not use settings that are
+  required to compile the files correctly.  The easiest way to solve the
+  problem is to remove the .cc files from the glu project.  This does not
+  delete the files, but removes them from the project so that VS does not
+  try to compile them at all.  This allows the custom build step to compile 
+  the files with the proper settings.
+
+- After building, you can copy the above DLL files to a place in your PATH
+  such as $SystemRoot/SYSTEM32.  If you don't like putting things in a
+  system directory, place them in the same directory as the executable(s).
+  Be careful about accidentially overwriting files of the same name in
+  the SYSTEM32 directory.
+
+- Build the demos by opening the appropriate *.dsw file in the
+  progs directory tree.  For example, to build the demos, use
+  progs/demos/Windows/demos.dsw.  The Windows directory contains
+  the workspace and all the projects for each demo program.  Each
+  project places the executable in the same directory as its source
+  code, which is required for some demos.
+
+- The demo projects also copy the Mesa library DLL files from the lib
+  directory into the same directory as the demo executables, so that
+  the demos use the Mesa libs you just built.
+
+- The DLL files are built so that the external entry points use the
+  stdcall calling convention.
+
+- Static LIB files are not built.  The LIB files that are built with
+  are the linker import files associated with the DLL files.  
+
+- The si-glu sources are used to build the GLU libs.  This was done
+  mainly to get the better tessellator code.
+
+- The Windows driver (in src/Windows) builds and runs at least at
+  a minimal level.  I modified this driver to work with the new
+  Mesa 4.0 code and driver architecture, but I did not do a great
+  deal of optimization and testing.  There are many opportunities
+  for optimization, many of which can be done by coding more specific
+  paths for the rasterizers.  See src/osmesa/osmesa.c for some good
+  examples.
+
+- There is DirectDraw support in the Windows driver, updated by
+  Daniel Slater.  You'll need to uncomment the #define DDRAW line
+  in src/Windows/wmesadef.h and add ddraw.lib to the list of libraries.
+  On some systems, you will acheive significantly higher framerates 
+  with DirectDraw.
+
+- Some of the more specialized code like FX drivers, stereo, and
+  parallel support isn't compiled or tested.  I left much of this
+  code alone, but it may need some work to get it 'turned on' again.
+
+- No assembly code is compiled or assembled.  Again, this may need
+  some work to turn it back on or use it again.
+
+- To build "mangled" Mesa, add the preprocessor define USE_MGL_NAMESPACE
+  to the project settings.  You will also need to edit src/mesa.def to change
+  all the gl* symbols to mgl*.  Because this is easy to do with a global
+  replace operation in a text editor, no additional mangled version of mesa.def
+  is maintained or shipped.
+
+If you have a Windows-related build problem or question, it is
+probably better to direct it to me (kschultz@users.sourceforge.net),
+rather than directly to the other Mesa developers.  I will help you
+as much as I can.  I also monitor the Mesa mailing lists and will
+answer questions in this area there as well.
+
+
+Karl Schultz
