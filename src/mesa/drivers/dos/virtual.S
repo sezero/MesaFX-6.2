@@ -96,11 +96,11 @@ _v_clear_common:
 		MOV_L	(CONTENT(_vl_current_draw_buffer), EDX)
 		SHR_L	(CONST(2), ECX)
 		ALIGNTEXT4
-	TLBL(0):
+	0:
 		MOV_L	(EAX, REGIND(EDX))
 		ADD_L	(CONST(4), EDX)
 		DEC_L	(ECX)
-		jnz	TLBL(0)
+		jnz	0b
 		RET
 
 /* Desc: void v_clear8_mmx (int color);
@@ -155,11 +155,11 @@ _v_clear_common_mmx:
 		MOV_L	(CONTENT(_vl_current_draw_buffer), EDX)
 		SHR_L	(CONST(3), ECX)
 		ALIGNTEXT4
-	TLBL(0):
+	0:
 		MOVQ	(MM0, REGIND(EDX))
 		ADD_L	(CONST(8), EDX)
 		DEC_L	(ECX)
-		jnz	TLBL(0)
+		jnz	0b
 		EMMS
 #endif
 		RET
@@ -183,12 +183,12 @@ _v_clear24:
 		SHR_L	(CONST(1), ECX)
 		MOV_B	(REGOFF(10,ESP), BL)
 		ALIGNTEXT4
-	TLBL(0):
+	0:
 		MOV_W	(AX, REGIND(EDX))
 		MOV_B	(BL, REGOFF(2,EDX))
 		ADD_L	(CONST(3), EDX)
 		DEC_L	(ECX)
-		jnz	TLBL(0)
+		jnz	0b
 		POP_L	(EBX)
 		RET
 
@@ -229,13 +229,13 @@ _v_clear24_mmx:
 		MOV_L	(CONTENT(_vl_current_draw_buffer), EDX)
 		SHR_L	(CONST(4), ECX)
 		ALIGNTEXT4
-	TLBL(0):
+	0:
 		MOVQ	(MM0, REGIND(EDX))
 		MOVQ	(MM1, REGOFF(8,EDX))
 		MOVQ	(MM2, REGOFF(16,EDX))
 		ADD_L	(CONST(24), EDX)
 		DEC_L	(ECX)
-		jnz	TLBL(0)
+		jnz	0b
 		EMMS
 		ADD_L	(CONST(16), ESP)
 #endif
@@ -273,22 +273,22 @@ _v_rect8:
 		MOV_L	(ECX, EBX)
 		AND_L	(CONST(3), EBX)
 		ALIGNTEXT4
-	TLBL(0):
+	0:
 		PUSH_L	(ECX)
 		ALIGNTEXT4
-	TLBL(1):
+	1:
 		SHR_L	(CONST(2), ECX)
 		REP	STOS_L
 		TEST_L	(EBX, EBX)
-		jz	TLBL(2)
+		jz	2f
 		MOV_L	(EBX, ECX)
 		REP	STOS_B
 		ALIGNTEXT4
-	TLBL(2):
+	2:
 		POP_L	(ECX)
 		ADD_L	(ESI, EDI)
 		DEC_L	(EDX)
-		jnz	TLBL(0)
+		jnz	0b
 		POP_L	(EBX)
 		POP_L	(EDI)
 		POP_L	(ESI)
@@ -324,20 +324,20 @@ _v_rect16:
 		ADD_L	(CONTENT(_vl_current_draw_buffer), EDI)
 		POP_L	(EAX)
 		ALIGNTEXT4
-	TLBL(0):
+	0:
 		PUSH_L	(ECX)
 		ALIGNTEXT4
-	TLBL(1):
+	1:
 		SHR_L	(CONST(1), ECX)
 		REP	STOS_L
-		jnc	TLBL(2)
+		jnc	2f
 		STOS_W
 		ALIGNTEXT4
-	TLBL(2):
+	2:
 		POP_L	(ECX)
 		ADD_L	(ESI, EDI)
 		DEC_L	(EDX)
-		jnz	TLBL(0)
+		jnz	0b
 		POP_L	(EDI)
 		POP_L	(ESI)
 		RET
@@ -369,19 +369,19 @@ _v_rect24:
 		ADD_L	(CONTENT(_vl_current_draw_buffer), EDI)
 		SHR_L	(CONST(16), EBX)
 		ALIGNTEXT4
-	TLBL(0):
+	0:
 		PUSH_L	(ECX)
 		ALIGNTEXT4
-	TLBL(1):
+	1:
 		MOV_W	(AX, REGIND(EDI))
 		MOV_B	(BL, REGOFF(2,EDI))
 		ADD_L	(CONST(3), EDI)
 		DEC_L	(ECX)
-		jnz	TLBL(1)
+		jnz	1b
 		POP_L	(ECX)
 		ADD_L	(ESI, EDI)
 		DEC_L	(EDX)
-		jnz	TLBL(0)
+		jnz	0b
 		POP_L	(EBX)
 		POP_L	(EDI)
 		POP_L	(ESI)
@@ -411,18 +411,18 @@ _v_rect32:
 		MOV_L	(REGOFF(28, ESP), EAX)
 		ADD_L	(CONTENT(_vl_current_draw_buffer), EDI)
 		ALIGNTEXT4
-	TLBL(0):
+	0:
 		PUSH_L	(ECX)
 		ALIGNTEXT4
-	TLBL(1):
+	1:
 		MOV_L	(EAX, REGIND(EDI))
 		ADD_L	(CONST(4), EDI)
 		DEC_L	(ECX)
-		jnz	TLBL(1)
+		jnz	1b
 		POP_L	(ECX)
 		ADD_L	(ESI, EDI)
 		DEC_L	(EDX)
-		jnz	TLBL(0)
+		jnz	0b
 		POP_L	(EDI)
 		POP_L	(ESI)
 		RET

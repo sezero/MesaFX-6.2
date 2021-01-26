@@ -103,12 +103,12 @@ _vesa_b_dump_virtual:
 		MOV_L	(CONTENT(_vl_current_delta), EBX)
 		SHR_L	(CONST(2), ECX)
 		ALIGNTEXT4
-	TLBL(0):
+	0:
 		PUSH_L	(ECX)
 		ALIGNTEXT4
-	TLBL(1):
+	1:
 		CMP_L	(EBP, EDI)
-		jb	TLBL(2)
+		jb	2f
 		PUSH_L	(EAX)
 		PUSH_L	(EBX)
 		INC_L	(EDX)
@@ -118,14 +118,14 @@ _vesa_b_dump_virtual:
 		POP_L	(EAX)
 		SUB_L	(EBP, EDI)
 		ALIGNTEXT4
-	TLBL(2):
+	2:
 		MOVS_L
 		DEC_L	(ECX)
-		jnz	TLBL(1)
+		jnz	1b
 		POP_L	(ECX)
 		ADD_L	(EBX, EDI)
 		DEC_L	(EAX)
-		jnz	TLBL(0)
+		jnz	0b
 		POP_L	(EBP)
 		POP_L	(EDI)
 		POP_L	(ESI)
@@ -155,13 +155,13 @@ _vesa_l_dump_virtual:
 		MOV_L	(CONTENT(_vl_current_delta), EAX)
 		SHR_L	(CONST(2), ECX)
 		ALIGNTEXT4
-	TLBL(0):
+	0:
 		PUSH_L	(ECX)
 		REP	MOVS_L
 		POP_L	(ECX)
 		ADD_L	(EAX, EDI)
 		DEC_L	(EDX)
-		jnz	TLBL(0)
+		jnz	0b
 		POP_L	(EDI)
 		POP_L	(ESI)
 		POP_SR	(ES)
@@ -188,21 +188,21 @@ _vesa_l_dump_virtual_mmx:
 		MOV_L	(CONTENT(_vl_current_delta), EAX)
 		SHR_L	(CONST(3), ECX)
 		ALIGNTEXT4
-	TLBL(0):
+	0:
 		PUSH_L	(ECX)
 		ALIGNTEXT4
-	TLBL(1):
+	1:
 		MOVQ	(REGIND(ESI), MM0)
 		ADD_L	(CONST(8), ESI)
 		SEGFS
 		MOVQ	(MM0, REGIND(EDI))
 		ADD_L	(CONST(8), EDI)
 		DEC_L	(ECX)
-		jnz	TLBL(1)
+		jnz	1b
 		POP_L	(ECX)
 		ADD_L	(EAX, EDI)
 		DEC_L	(EDX)
-		jnz	TLBL(0)
+		jnz	0b
 		POP_L	(EDI)
 		POP_L	(ESI)
 		EMMS
