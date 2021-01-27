@@ -64,19 +64,12 @@ extern "C"
 #pragma warning( disable : 4273 )
 #endif
 
-struct __extensions__
-{
-   PROC proc;
-   char *name;
-};
-
 struct __pixelformat__
 {
    PIXELFORMATDESCRIPTOR pfd;
    GLint mesaAttr[MAX_MESA_ATTRS];
 };
 
-WINGDIAPI void GLAPIENTRY gl3DfxSetPaletteEXT(GLuint *);
 static GLushort gammaTable[3*256];
 
 struct __pixelformat__ pix[] = {
