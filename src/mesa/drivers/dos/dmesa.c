@@ -1324,9 +1324,9 @@ DMesaBuffer DMesaGetCurrentBuffer (void)
 
 
 
-void *DMesaGetProcAddress (const char *name)
+DMesaProc DMesaGetProcAddress (const char *name)
 {
- void *p = (void *)_glapi_get_proc_address(name);
+ DMesaProc p = (DMesaProc)_glapi_get_proc_address(name);
 
 /* TODO: handle DMesa* namespace
  if (p == NULL) {
