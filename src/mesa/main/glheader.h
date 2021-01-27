@@ -85,7 +85,7 @@
 #endif
 
 #if !defined(OPENSTEP) && (defined(__WIN32__) && !defined(__CYGWIN__)) && !defined(BUILD_FOR_SNAP)
-#  if !defined(__GNUC__) /* mingw environment */
+#  ifdef _MSC_VER
 #    pragma warning( disable : 4068 ) /* unknown pragma */
 #    pragma warning( disable : 4710 ) /* function 'foo' not inlined */
 #    pragma warning( disable : 4711 ) /* function 'foo' selected for automatic inline expansion */

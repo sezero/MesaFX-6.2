@@ -52,7 +52,7 @@ extern "C" {
 
 #include "GL/gl.h"
 
-#if defined(_MSV_VER) && !defined(__GNUC__)
+#if defined(_MSC_VER)
 #  pragma warning (disable:4273)
 #  pragma warning( disable : 4244 ) /* '=' : conversion from 'const double ' to 'float ', possible loss of data */
 #  pragma warning( disable : 4018 ) /* '<' : signed/unsigned mismatch */
