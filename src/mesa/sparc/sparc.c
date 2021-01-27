@@ -148,12 +148,9 @@ extern unsigned int _mesa_sparc_glapi_begin;
 extern unsigned int _mesa_sparc_glapi_end;
 extern void __glapi_sparc_icache_flush(unsigned int *);
 
-#endif /* USE_SPARC_ASM */
-
 
 void _mesa_init_sparc_glapi_relocs(void)
 {
-#ifdef USE_SPARC_ASM
 	unsigned int *insn_ptr, *end_ptr;
 	unsigned long disp_addr;
 
@@ -177,5 +174,6 @@ void _mesa_init_sparc_glapi_relocs(void)
 		insn_ptr += 5;
 #endif
 	}
-#endif /* USE_SPARC_ASM */
 }
+
+#endif /* USE_SPARC_ASM */
