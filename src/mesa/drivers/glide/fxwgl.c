@@ -72,7 +72,7 @@ struct __pixelformat__
 
 static GLushort gammaTable[3*256];
 
-struct __pixelformat__ pix[] = {
+static struct __pixelformat__ pix[] = {
    /* 16bit RGB565 single buffer with depth */
    {
     {sizeof(PIXELFORMATDESCRIPTOR), 1,
@@ -218,20 +218,6 @@ static int curPFD = 0;
 static HDC hDC;
 static HWND hWND;
 
-static GLboolean haveDualHead;
-
-/* For the in-window-rendering hack */
-
-#ifndef GR_CONTROL_RESIZE
-/* Apparently GR_CONTROL_RESIZE can be ignored. OK? */
-#define GR_CONTROL_RESIZE -1
-#endif
-
-static GLboolean gdiWindowHack;
-static void *dibSurfacePtr;
-static BITMAPINFO *dibBMI;
-static HBITMAP dibHBM;
-static HWND dibWnd;
 
 static int env_check (const char *var, int val)
 {
@@ -239,10 +225,10 @@ static int env_check (const char *var, int val)
  return (env && (env[0] == val));
 }
 
-static LRESULT APIENTRY 
-__wglMonitor(HWND hwnd, UINT message, UINT wParam, LONG lParam)
- {
-   long ret;			/* Now gives the resized window at the end to hWNDOldProc */
+static LRESULT WINAPI
+__wglMonitor(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+   LRESULT  ret;		/* Now gives the resized window at the end to hWNDOldProc */
 
    if (ctx && hwnd == hWND) {
      switch (message) {
@@ -251,29 +237,9 @@ __wglMonitor(HWND hwnd, UINT message, UINT wParam, LONG lParam)
 	   break;
        case WM_DISPLAYCHANGE:
        case WM_SIZE:
-#if 0
-       if (wParam != SIZE_MINIMIZED) {
-         static int moving = 0;
-         if (!moving) {
-           if (!FX_grSstControl(GR_CONTROL_RESIZE)) {
-             moving = 1;
-             SetWindowPos(hwnd, 0, 0, 0, 300, 300, SWP_NOMOVE | SWP_NOZORDER);
-             moving = 0;
-             if (!FX_grSstControl(GR_CONTROL_RESIZE)) {
-               /*MessageBox(0,_T("Error changing windowsize"),_T("fxMESA"),MB_OK); */
-               PostMessage(hWND, WM_CLOSE, 0, 0);
-		     }
-		   }
-	       /* Do the clipping in the glide library */
-	       grClipWindow(0, 0, FX_grSstScreenWidth(), FX_grSstScreenHeight());
-           /* And let the new size set in the context */
-           fxMesaUpdateScreenSize(ctx);
-	     }
-	   }
-#endif
-       break;
+	   break;
        case WM_ACTIVATE:
-       break;
+	   break;
        case WM_SHOWWINDOW:
 	   break;
        case WM_SYSKEYDOWN:
@@ -348,12 +314,6 @@ wglCreateContext(HDC hdc)
         error = !(ctx = fxMesaCreateBestContext((GLuint) hWnd, cliRect.right, cliRect.bottom, pix[curPFD - 1].mesaAttr));
      }
    }
-
-   /*if (getenv("SST_DUALHEAD"))
-      haveDualHead =
-	 ((atoi(getenv("SST_DUALHEAD")) == 1) ? GL_TRUE : GL_FALSE);
-   else
-      haveDualHead = GL_FALSE;*/
 
    if (error) {
       SetLastError(0);
@@ -593,26 +553,26 @@ static struct {
        const char *name;
        PROC func;
 } wgl_ext[] = {
-       {"wglGetExtensionsStringARB",    wglGetExtensionsStringARB},
-       {"wglGetExtensionsStringEXT",    wglGetExtensionsStringEXT},
-       {"wglSwapIntervalEXT",           wglSwapIntervalEXT},
-       {"wglGetSwapIntervalEXT",        wglGetSwapIntervalEXT},
-       {"wglGetDeviceGammaRamp3DFX",    wglGetDeviceGammaRamp3DFX},
-       {"wglSetDeviceGammaRamp3DFX",    wglSetDeviceGammaRamp3DFX},
+       {"wglGetExtensionsStringARB",    (PROC)wglGetExtensionsStringARB},
+       {"wglGetExtensionsStringEXT",    (PROC)wglGetExtensionsStringEXT},
+       {"wglSwapIntervalEXT",           (PROC)wglSwapIntervalEXT},
+       {"wglGetSwapIntervalEXT",        (PROC)wglGetSwapIntervalEXT},
+       {"wglGetDeviceGammaRamp3DFX",    (PROC)wglGetDeviceGammaRamp3DFX},
+       {"wglSetDeviceGammaRamp3DFX",    (PROC)wglSetDeviceGammaRamp3DFX},
        /* WGL_ARB_pixel_format */
-       {"wglGetPixelFormatAttribivARB", wglGetPixelFormatAttribivARB},
-       {"wglGetPixelFormatAttribfvARB", wglGetPixelFormatAttribfvARB},
-       {"wglChoosePixelFormatARB",      wglChoosePixelFormatARB},
+       {"wglGetPixelFormatAttribivARB", (PROC)wglGetPixelFormatAttribivARB},
+       {"wglGetPixelFormatAttribfvARB", (PROC)wglGetPixelFormatAttribfvARB},
+       {"wglChoosePixelFormatARB",      (PROC)wglChoosePixelFormatARB},
        /* WGL_ARB_render_texture */
-       {"wglBindTexImageARB",           wglBindTexImageARB},
-       {"wglReleaseTexImageARB",        wglReleaseTexImageARB},
-       {"wglSetPbufferAttribARB",       wglSetPbufferAttribARB},
+       {"wglBindTexImageARB",           (PROC)wglBindTexImageARB},
+       {"wglReleaseTexImageARB",        (PROC)wglReleaseTexImageARB},
+       {"wglSetPbufferAttribARB",       (PROC)wglSetPbufferAttribARB},
        /* WGL_ARB_pbuffer */
-       {"wglCreatePbufferARB",          wglCreatePbufferARB},
-       {"wglGetPbufferDCARB",           wglGetPbufferDCARB},
-       {"wglReleasePbufferDCARB",       wglReleasePbufferDCARB},
-       {"wglDestroyPbufferARB",         wglDestroyPbufferARB},
-       {"wglQueryPbufferARB",           wglQueryPbufferARB},
+       {"wglCreatePbufferARB",          (PROC)wglCreatePbufferARB},
+       {"wglGetPbufferDCARB",           (PROC)wglGetPbufferDCARB},
+       {"wglReleasePbufferDCARB",       (PROC)wglReleasePbufferDCARB},
+       {"wglDestroyPbufferARB",         (PROC)wglDestroyPbufferARB},
+       {"wglQueryPbufferARB",           (PROC)wglQueryPbufferARB},
        {NULL, NULL}
 };
 
@@ -882,7 +842,7 @@ wglChoosePixelFormat(HDC hdc, const PIXELFORMATDESCRIPTOR * ppfd)
          fprintf(err, "wglChoosePixelFormat failed\n");
          fprintf(err, "\tnSize           = %d\n", ppfd->nSize);
          fprintf(err, "\tnVersion        = %d\n", ppfd->nVersion);
-         fprintf(err, "\tdwFlags         = %d\n", ppfd->dwFlags);
+         fprintf(err, "\tdwFlags         = %lu\n", ppfd->dwFlags);
          fprintf(err, "\tiPixelType      = %d\n", ppfd->iPixelType);
          fprintf(err, "\tcColorBits      = %d\n", ppfd->cColorBits);
          fprintf(err, "\tcRedBits        = %d\n", ppfd->cRedBits);
@@ -903,9 +863,9 @@ wglChoosePixelFormat(HDC hdc, const PIXELFORMATDESCRIPTOR * ppfd)
          fprintf(err, "\tcAuxBuffers     = %d\n", ppfd->cAuxBuffers);
          fprintf(err, "\tiLayerType      = %d\n", ppfd->iLayerType);
          fprintf(err, "\tbReserved       = %d\n", ppfd->bReserved);
-         fprintf(err, "\tdwLayerMask     = %d\n", ppfd->dwLayerMask);
-         fprintf(err, "\tdwVisibleMask   = %d\n", ppfd->dwVisibleMask);
-         fprintf(err, "\tdwDamageMask    = %d\n", ppfd->dwDamageMask);
+         fprintf(err, "\tdwLayerMask     = %lu\n", ppfd->dwLayerMask);
+         fprintf(err, "\tdwVisibleMask   = %lu\n", ppfd->dwVisibleMask);
+         fprintf(err, "\tdwDamageMask    = %lu\n", ppfd->dwDamageMask);
          fclose(err);
       }
 
@@ -1018,8 +978,12 @@ SwapBuffers(HDC hdc)
 
 static FIXED FixedFromDouble(double d)
 {
-  long l = (long) (d * 65536L);
-  return *(FIXED *)&l;
+   struct {
+      FIXED f;
+      long l;
+   } pun;
+   pun.l = (long)(d * 65536L);
+   return pun.f;
 }
 
 /*
