@@ -30,8 +30,8 @@
 /* Mesa version */
 #define MESA_MAJOR 6
 #define MESA_MINOR 2
-#define MESA_PATCH 1
-#define MESA_VERSION_STRING "6.2.1"
+#define MESA_PATCH 2
+#define MESA_VERSION_STRING "6.2.2"
 
 /* To make version comparison easy */
 #define MESA_VERSION(a,b,c) (((a) << 16) + ((b) << 8) + (c))
