@@ -203,7 +203,7 @@ gl3DfxSetPaletteEXT(GLuint * pal)
 
 static GrScreenResolution_t fxBestResolution (int width, int height)
 {
- static int resolutions[][3] = {
+ static const int resolutions[][3] = {
         { GR_RESOLUTION_320x200,    320,  200 },
         { GR_RESOLUTION_320x240,    320,  240 },
         { GR_RESOLUTION_400x256,    400,  256 },

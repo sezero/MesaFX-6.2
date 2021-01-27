@@ -63,7 +63,7 @@ GLboolean fxMultipass_ColorSum (GLcontext *ctx, GLuint pass);
 static void fxRasterPrimitive( GLcontext *ctx, GLenum prim );
 static void fxRenderPrimitive( GLcontext *ctx, GLenum prim );
 
-static GLenum reduced_prim[GL_POLYGON+1] = {
+static const GLenum reduced_prim[GL_POLYGON+1] = {
    GL_POINTS,
    GL_LINES,
    GL_LINES,
@@ -1468,7 +1468,7 @@ static void fxRenderFinish( GLcontext *ctx )
 /*               Manage total rasterization fallbacks                 */
 /**********************************************************************/
 
-static char *fallbackStrings[] = {
+static const char *fallbackStrings[] = {
    "3D/Rect/Cube Texture map",
    "glDrawBuffer(GL_FRONT_AND_BACK)",
    "Separate specular color",
@@ -1483,7 +1483,7 @@ static char *fallbackStrings[] = {
 };
 
 
-static char *getFallbackString(GLuint bit)
+static const char *getFallbackString(GLuint bit)
 {
    int i = 0;
    while (bit > 1) {
