@@ -243,7 +243,7 @@ fx_fallback_point( fxMesaContext fxMesa,
 /***********************************************************************
  *                 Functions to draw basic primitives                  *
  ***********************************************************************/
-
+#if 0 /**/
 static void fx_print_vertex( GLcontext *ctx, const GrVertex *v )
 {
  fprintf(stderr, "fx_print_vertex:\n");
@@ -259,6 +259,7 @@ static void fx_print_vertex( GLcontext *ctx, const GrVertex *v )
    
  fprintf(stderr, "\n");
 }
+#endif /**/
 
 #define DO_FALLBACK 0
 
@@ -1552,8 +1553,9 @@ void fxDDInitTriFuncs( GLcontext *ctx )
    tnl->Driver.Render.ResetLineStipple = _swrast_ResetLineStipple;
    tnl->Driver.Render.BuildVertices = fxBuildVertices;
    tnl->Driver.Render.Multipass = NULL;
-   
+#if 0 /**/
    (void) fx_print_vertex;
+#endif /**/
 }
 
 

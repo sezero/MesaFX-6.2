@@ -149,6 +149,7 @@ _mesa_halve2x2_teximage2d ( GLcontext *ctx,
 }
 
 
+#if 0
 void
 fxPrintTextureData(tfxTexInfo * ti)
 {
@@ -181,6 +182,7 @@ fxPrintTextureData(tfxTexInfo * ti)
 	   (ti->fixedPalette) ? "Fixed palette" : "Non fixed palette");
    fprintf(stderr, "\t%s\n", (ti->validated) ? "Validated" : "Not validated");
 }
+#endif
 
 
 /************************************************************************/
@@ -994,6 +996,7 @@ fetch_rgba_dxt5(const struct gl_texture_image *texImage,
 }
 
 
+#if 0
 static void
 PrintTexture(int w, int h, int c, const GLubyte * data)
 {
@@ -1009,6 +1012,7 @@ PrintTexture(int w, int h, int c, const GLubyte * data)
       fprintf(stderr, "\n");
    }
 }
+#endif
 
 
 const struct gl_texture_format *

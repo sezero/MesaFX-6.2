@@ -134,7 +134,7 @@ _mesa_copy_texture_state( const GLcontext *src, GLcontext *dst )
    }
 }
 
-
+#ifdef DEBUG
 /*
  * For debugging
  */
@@ -162,7 +162,7 @@ _mesa_print_texunit_state( GLcontext *ctx, GLuint unit )
    _mesa_printf("  GL_ALPHA_SCALE = %d\n", 1 << texUnit->Combine.ScaleShiftA);
    _mesa_printf("  GL_TEXTURE_ENV_COLOR = (%f, %f, %f, %f)\n", texUnit->EnvColor[0], texUnit->EnvColor[1], texUnit->EnvColor[2], texUnit->EnvColor[3]);
 }
-
+#endif
 
 
 /**********************************************************************/

@@ -64,6 +64,7 @@ static void TAG(WriteDepthSpan)( GLcontext *ctx,
    HW_WRITE_UNLOCK();
 }
 
+#if 0 /**/
 #ifndef NO_MONO
 
 static void TAG(WriteMonoDepthSpan)( GLcontext *ctx,
@@ -103,6 +104,7 @@ static void TAG(WriteMonoDepthSpan)( GLcontext *ctx,
 }
 
 #endif
+#endif /**/
 
 static void TAG(WriteDepthPixels)( GLcontext *ctx,
 				   GLuint n,
@@ -140,6 +142,7 @@ static void TAG(WriteDepthPixels)( GLcontext *ctx,
 }
 
 
+#if 0
 /* Read depth spans and pixels
  */
 static void TAG(ReadDepthSpan)( GLcontext *ctx,
@@ -172,6 +175,7 @@ static void TAG(ReadDepthSpan)( GLcontext *ctx,
       }
    HW_READ_UNLOCK();
 }
+#endif
 
 static void TAG(ReadDepthPixels)( GLcontext *ctx, GLuint n,
 				  const GLint x[], const GLint y[],

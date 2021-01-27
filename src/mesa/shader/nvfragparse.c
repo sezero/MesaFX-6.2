@@ -1500,7 +1500,7 @@ _mesa_parse_nv_fragment_program(GLcontext *ctx, GLenum dstTarget,
    }
 }
 
-
+#ifdef DEBUG
 static void
 PrintSrcReg(const struct fragment_program *program,
             const struct fp_src_register *src)
@@ -1749,7 +1749,7 @@ _mesa_print_nv_fragment_program(const struct fragment_program *program)
    }
    _mesa_printf("END\n");
 }
-
+#endif
 
 const char *
 _mesa_nv_fragment_input_register_name(GLuint i)

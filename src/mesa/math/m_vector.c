@@ -134,7 +134,7 @@ void _mesa_vector4f_free( GLvector4f *v )
    }
 }
 
-
+#ifdef DEBUG
 /*
  * For debugging
  */
@@ -186,5 +186,5 @@ void _mesa_vector4f_print( GLvector4f *v, GLubyte *cullmask, GLboolean culling )
       }
    }
 }
-
+#endif
 

@@ -292,6 +292,7 @@ static const char *OutputRegisters[MAX_NV_VERTEX_PROGRAM_OUTPUTS + 1] = {
    "TEX0", "TEX1", "TEX2", "TEX3", "TEX4", "TEX5", "TEX6", "TEX7", NULL
 };
 
+#ifdef DEBUG
 /* NOTE: the order here must match opcodes in nvvertprog.h */
 static const char *Opcodes[] = {
    "MOV", "LIT", "RCP", "RSQ", "EXP", "LOG", "MUL", "ADD", "DP3", "DP4",
@@ -301,8 +302,7 @@ static const char *Opcodes[] = {
    "FLR", "FRC", "EX2", "LG2", "POW", "XPD", "SWZ",
    NULL
 };
-
-
+#endif
 
 /**
  * Parse a temporary register: Rnn
@@ -1320,7 +1320,7 @@ _mesa_parse_nv_vertex_program(GLcontext *ctx, GLenum dstTarget,
    }
 }
 
-
+#ifdef DEBUG
 static void
 PrintSrcReg(const struct vp_src_register *src)
 {
@@ -1480,7 +1480,7 @@ _mesa_print_nv_vertex_program(const struct vertex_program *program)
          return;
    }
 }
-
+#endif
 
 const char *
 _mesa_nv_vertex_input_register_name(GLuint i)

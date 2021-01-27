@@ -28,6 +28,7 @@
 #include "debug.h"
 #include "get.h"
 
+#if 0
 /**
  * Primitive names
  */
@@ -46,7 +47,9 @@ const char *_mesa_prim_name[GL_POLYGON+4] = {
    "inside unkown primitive",
    "unknown state"
 };
+#endif
 
+#ifdef MESA_DEBUG
 void
 _mesa_print_state( const char *msg, GLuint state )
 {
@@ -105,6 +108,7 @@ _mesa_print_tri_caps( const char *name, GLuint flags )
 	   (flags & DD_TRI_CULL_FRONT_BACK) ? "cull-all, " : ""
       );
 }
+#endif
 
 
 /**

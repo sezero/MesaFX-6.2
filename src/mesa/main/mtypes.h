@@ -2408,8 +2408,10 @@ struct __GLcontextRec {
 };
 
 
+#if 0
 /** The string names for GL_POINT, GL_LINE_LOOP, etc */
 extern const char *_mesa_prim_name[GL_POLYGON+4];
+#endif
 
 
 #ifdef MESA_DEBUG

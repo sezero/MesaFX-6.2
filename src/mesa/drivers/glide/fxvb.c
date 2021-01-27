@@ -652,6 +652,7 @@ static void init_setup_tab( void )
 }
 
 
+#if 0
 void fxPrintSetupFlags(char *msg, GLuint flags )
 {
    fprintf(stderr, "%s(%x): %s%s%s%s%s%s%s%s\n",
@@ -666,7 +667,7 @@ void fxPrintSetupFlags(char *msg, GLuint flags )
 	   (flags & SETUP_SPEC)     ? " spec," : "",
 	   (flags & SETUP_FOGC)     ? " fog," : "");
 }
-
+#endif
 
 
 void fxCheckTexSizes( GLcontext *ctx )

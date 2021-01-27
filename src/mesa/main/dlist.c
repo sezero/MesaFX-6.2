@@ -6316,9 +6316,10 @@ _mesa_EndList( void )
    /* Install the list */
    _mesa_HashInsert(ctx->Shared->DisplayList, ctx->ListState.CurrentListNum, ctx->ListState.CurrentListPtr);
 
-
+#ifdef DEBUG
    if (MESA_VERBOSE & VERBOSE_DISPLAY_LIST)
       mesa_print_display_list(ctx->ListState.CurrentListNum);
+#endif
 
    ctx->ListState.CurrentListNum = 0;
    ctx->ListState.CurrentListPtr = NULL;
@@ -7641,7 +7642,7 @@ _mesa_init_dlist_table( struct _glapi_table *table, GLuint tableSize )
 }
 
 
-
+#ifdef DEBUG
 /***
  *** Debugging code
  ***/
@@ -7649,7 +7650,6 @@ static const char *enum_string( GLenum k )
 {
    return _mesa_lookup_enum_by_nr( k );
 }
-
 
 /*
  * Print the commands in a display list.  For debugging only.
@@ -7901,7 +7901,6 @@ static void GLAPIENTRY print_list( GLcontext *ctx, GLuint list )
 }
 
 
-
 /*
  * Clients may call this function to help debug display list problems.
  * This function is _ONLY_FOR_DEBUGGING_PURPOSES_.  It may be removed,
@@ -7912,7 +7911,7 @@ void mesa_print_display_list( GLuint list )
    GET_CURRENT_CONTEXT(ctx);
    print_list( ctx, list );
 }
-
+#endif
 
 /**********************************************************************/
 /*****                      Initialization                        *****/

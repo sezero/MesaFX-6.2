@@ -232,6 +232,7 @@ static void TAG(WriteMonoRGBAPixels)( const GLcontext *ctx,
 }
 
 
+#if 0
 static void TAG(ReadRGBASpan)( const GLcontext *ctx,
 			       GLuint n, GLint x, GLint y,
 			       GLubyte rgba[][4])
@@ -256,6 +257,7 @@ static void TAG(ReadRGBASpan)( const GLcontext *ctx,
       }
    HW_READ_UNLOCK();
 }
+#endif
 
 
 static void TAG(ReadRGBAPixels)( const GLcontext *ctx,

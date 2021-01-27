@@ -265,7 +265,7 @@ GLuint _mesa_HashFirstEntry(struct _mesa_HashTable *table)
 }
 
 
-
+#ifdef HASH_TEST_HARNESS
 /**
  * Dump contents of hash table for debugging.
  * 
@@ -283,6 +283,7 @@ void _mesa_HashPrint(const struct _mesa_HashTable *table)
       }
    }
 }
+#endif
 
 
 

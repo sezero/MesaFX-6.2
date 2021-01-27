@@ -44,6 +44,7 @@
 #include "arbprogparse.h"
 
 
+#if DEBUG_VP
 static GLvoid
 debug_vp_inst(GLint num, struct vp_instruction *vp)
 {
@@ -166,7 +167,7 @@ debug_vp_inst(GLint num, struct vp_instruction *vp)
       fprintf(stderr, "\n");
    }
 }
-
+#endif
 
 void
 _mesa_parse_arb_vertex_program(GLcontext * ctx, GLenum target,
@@ -224,8 +225,10 @@ _mesa_parse_arb_vertex_program(GLcontext * ctx, GLenum target,
 
 #if DEBUG_VP
    debug_vp_inst(ap.Base.NumInstructions, ap.VPInstructions);
+/*
 #else
    (void) debug_vp_inst;
+*/
 #endif
 
 }

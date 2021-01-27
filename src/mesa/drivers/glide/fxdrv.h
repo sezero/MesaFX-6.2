@@ -554,7 +554,9 @@ extern void fxSetupDDPointers(GLcontext *);
  */
 extern void fxAllocVB(GLcontext * ctx);
 extern void fxFreeVB(GLcontext * ctx);
+#if 0
 extern void fxPrintSetupFlags(char *msg, GLuint flags );
+#endif
 extern void fxCheckTexSizes( GLcontext *ctx );
 extern void fxBuildVertices( GLcontext *ctx, GLuint start, GLuint count,
 			     GLuint newinputs );

@@ -42,6 +42,7 @@
 #include "m_matrix.h"
 
 
+#if 0
 /**
  * Names of the corresponding GLmatrixtype values.
  */
@@ -54,6 +55,7 @@ static const char *types[] = {
    "MATRIX_2D_NO_ROT",
    "MATRIX_3D"
 };
+#endif
 
 
 /**
@@ -200,7 +202,7 @@ _math_matrix_mul_floats( GLmatrix *dest, const GLfloat *m )
 /**********************************************************************/
 /** \name Matrix output */
 /*@{*/
-
+#if 0
 /**
  * Print a matrix array.
  *
@@ -238,7 +240,7 @@ _math_matrix_print( const GLmatrix *m )
       _mesa_debug(NULL, "  - not available\n");
    }
 }
-
+#endif
 /*@}*/
 
 
