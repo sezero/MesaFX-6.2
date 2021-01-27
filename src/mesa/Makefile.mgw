@@ -71,7 +71,7 @@ endif
 LDLIBS = -lgdi32
 
 CC = mingw32-gcc
-CFLAGS += -DBUILD_GL32 -D_OPENGL32_ -D_MSC_VER
+CFLAGS += -DBUILD_GL32 -D_OPENGL32_
 CFLAGS += $(INCLUDE_DIRS)
 ifeq ($(FX),1)
   CFLAGS += -I$(GLIDE)/include -DFX
