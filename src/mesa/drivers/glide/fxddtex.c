@@ -49,7 +49,7 @@
 
 
 /* no borders! can't halve 1x1! (stride > width * comp) not allowed */
-void
+static void
 _mesa_halve2x2_teximage2d ( GLcontext *ctx,
 			    struct gl_texture_image *texImage,
 			    GLuint bytesPerPixel,
