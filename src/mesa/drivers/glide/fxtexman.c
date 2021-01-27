@@ -233,9 +233,9 @@ fxTMFindStartAddr(fxMesaContext fxMesa, GLint tmu, int size)
 
 int fxTMCheckStartAddr (fxMesaContext fxMesa, GLint tmu, tfxTexInfo *ti)
 {
- MemRange *prev, *tmp;
+ MemRange /* *prev,*/ *tmp;
  int size;
- struct gl_texture_object *obj;
+/*struct gl_texture_object *obj;*/
 
  if (fxMesa->HaveTexUma) {
     return FXTRUE;

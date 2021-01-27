@@ -1675,7 +1675,7 @@ static const struct tnl_pipeline_stage *fx_pipeline[] = {
 int
 fxDDInitFxMesaContext(fxMesaContext fxMesa)
 {
-   int i;
+/* int i;*/
    GLcontext *ctx = fxMesa->glCtx;
 
    FX_setupGrVertexLayout();
@@ -2102,7 +2102,7 @@ void
 fxSetupDDPointers(GLcontext * ctx)
 {
    fxMesaContext fxMesa = FX_CONTEXT(ctx);
-   TNLcontext *tnl = TNL_CONTEXT(ctx);
+/* TNLcontext *tnl = TNL_CONTEXT(ctx);*/
 
    if (TDFX_DEBUG & VERBOSE_DRIVER) {
       fprintf(stderr, "fxSetupDDPointers()\n");
