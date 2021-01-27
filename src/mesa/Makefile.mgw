@@ -34,7 +34,7 @@
 #	CFLAGS
 #
 #	GLIDE		path to Glide3 SDK; used with FX.
-#			default = $(TOP)/glide3
+#			default = $(TOP)/3dfx/glide3
 #	FX=1		build for 3dfx Glide3. Note that this disables
 #			compilation of most WMesa code and requires fxMesa.
 #			As a consequence, you'll need the Win32 Glide3
@@ -58,7 +58,7 @@
 .SUFFIXES: .rc .res
 
 TOP = ../..
-GLIDE ?= $(TOP)/glide3
+GLIDE ?= $(TOP)/3dfx/glide3
 LIBDIR = $(TOP)/lib
 ifeq ($(ICD),1)
   GL_DLL = mesa32.dll
@@ -70,7 +70,8 @@ endif
 
 LDLIBS = -lgdi32
 
-CC = mingw32-gcc
+HOST_CC = gcc
+CC = gcc
 CFLAGS += -DBUILD_GL32 -D_OPENGL32_
 CFLAGS += $(INCLUDE_DIRS)
 ifeq ($(FX),1)
@@ -87,14 +88,18 @@ else
   endif
 endif
 
+LD = $(CC)
+LDFLAGS = -shared -Wl,--no-undefined -Wl,--enable-auto-image-base -Wl,--kill-at -Wl,-enable-stdcall-fixup
 AR = ar
 ARFLAGS = rus
 
-ifeq ($(wildcard $(addsuffix /rm.exe,$(subst ;, ,$(PATH)))),)
-UNLINK = del $(subst /,\,$(1))
-else
-UNLINK = $(RM) $(1)
-endif
+RC = windres
+RCFLAGS = --output-format=coff
+
+DLLWRAP = dllwrap
+DLLTOOL = dlltool
+
+UNLINK = rm -f $(1)
 
 include sources
 
@@ -139,20 +144,25 @@ RESOURCE = $(GL_RES:.rc=.res)
 .s.o:
 	$(CC) -o $@ $(CFLAGS) -x assembler-with-cpp -c $<
 .rc.res:
-	windres -o $@ -Irc -Ocoff $<
+	$(RC) -o $@ $(RCFLAGS) $<
 
 all: $(LIBDIR)/$(GL_DLL) $(LIBDIR)/$(GL_IMP)
 
-$(LIBDIR)/$(GL_DLL) $(LIBDIR)/$(GL_IMP): $(OBJECTS) $(RESOURCE)
-	dllwrap -o $(LIBDIR)/$(GL_DLL) --output-lib $(LIBDIR)/$(GL_IMP) --target i386-mingw32 --def $(GL_DEF) $^ $(LDLIBS)
+#$(LIBDIR)/$(GL_DLL) $(LIBDIR)/$(GL_IMP): $(OBJECTS) $(RESOURCE)
+#	$(DLLWRAP) -o $(LIBDIR)/$(GL_DLL) --output-lib $(LIBDIR)/$(GL_IMP) --target i386-mingw32 --def $(GL_DEF) $^ $(LDLIBS)
+$(LIBDIR)/$(GL_IMP): $(LIBDIR)/$(GL_DLL)
+# FIXME: the dlltool thing below is most probably broken, but don't care about it for now
+$(LIBDIR)/$(GL_DLL): $(OBJECTS) $(RESOURCE)
+	$(LD) $(LDFLAGS) -o $@ $(OBJECTS) $(RESOURCE) $(GL_DEF) $(LDLIBS)
+	$(DLLTOOL) --dllname $(GL_DLL) --input-def $(GL_DEF) --output-lib $(LIBDIR)/$(GL_IMP) -k
 
 $(X86_OBJECTS): x86/matypes.h
 
 x86/matypes.h: x86/gen_matypes.exe
-	$(subst /,\,$< > $@)
+	$< > $@
 
 x86/gen_matypes.exe: x86/gen_matypes.c
-	$(CC) -o $@ $(CFLAGS) -s $<
+	$(HOST_CC) -o $@ $(CFLAGS) -s $<
 
 # [dBorca]
 # glapi_x86.S needs some adjustments
@@ -191,3 +201,4 @@ clean:
 	-$(call UNLINK,drivers/windows/icd/*.o)
 	-$(call UNLINK,drivers/glide/*.o)
 	-$(call UNLINK,drivers/glide/*.res)
+
