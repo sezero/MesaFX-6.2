@@ -168,12 +168,8 @@ static vl_mode *vesa_init (void)
         q->scanlen = _16_ tmp[M_SCANLEN];
         q->gran = (_16_ tmp[M_GRAN])<<10;
         if (tmp[M_ATTR]&0x80) {
-#if 0
-           *(q+1) = *q++;
-#else
            vl_mode *q1 = q + 1;
            *q1 = *q++;
-#endif
            linearfb = _32_ tmp[M_PHYS_PTR];
            q->mode |= 0x4000;
         }
@@ -188,7 +184,7 @@ static vl_mode *vesa_init (void)
     return NULL;
  }
  if (linearfb) {
-    maxsize = ((maxsize+0xfffUL)&~0xfffUL);
+    maxsize = (maxsize + 0xfffUL) & ~0xfffUL;
     if (_create_selector(&linear_selector, linearfb, maxsize)) {
        return NULL;
     }
@@ -208,18 +204,21 @@ static vl_mode *vesa_init (void)
     __dpmi_int(0x10, &r);
     if (r.x.ax == 0x004f) {
        vesa_pmcode = (word16 *)malloc(r.x.cx);
-       movedata(__djgpp_dos_sel, (r.x.es << 4) + r.x.di, _my_ds(), (unsigned)vesa_pmcode, r.x.cx);
-       if (vesa_pmcode[3]) {
-          p = (word16 *)((long)vesa_pmcode + vesa_pmcode[3]);
-          while (*p++ != 0xffff) ;
-       } else {
-          p = NULL;
-       }
-       if (p && (*p != 0xffff)) {
-          free(vesa_pmcode);
-          vesa_pmcode = NULL;
-       } else {
-          vesa_swbank = (void *)((long)vesa_pmcode + vesa_pmcode[0]);
+       if (vesa_pmcode != NULL) {
+          movedata(__djgpp_dos_sel, (r.x.es << 4) + r.x.di, _my_ds(), (unsigned)vesa_pmcode, r.x.cx);
+          if (vesa_pmcode[3]) {
+             p = (word16 *)((long)vesa_pmcode + vesa_pmcode[3]);
+             while (*p++ != 0xffff) {
+             }
+          } else {
+             p = NULL;
+          }
+          if (p && (*p != 0xffff)) {
+             free(vesa_pmcode);
+             vesa_pmcode = NULL;
+          } else {
+             vesa_swbank = (void *)((long)vesa_pmcode + vesa_pmcode[0]);
+          }
        }
     }
  }
