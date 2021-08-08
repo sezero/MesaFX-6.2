@@ -241,11 +241,13 @@ static GrScreenResolution_t fxBestResolution (int width, int height)
  };
  GrResolution *presSupported;
 
- fxQueryHardware();
+ if (!fxQueryHardware()) {
+     return lastvalidres;
+ }
 
  size = grQueryResolutions(&resTemplate, NULL);
  presSupported = malloc(size);
-        
+
  size /= sizeof(GrResolution);
  grQueryResolutions(&resTemplate, presSupported);
 
@@ -269,12 +271,8 @@ fxMesaContext GLAPIENTRY
 fxMesaCreateBestContext(GLuint win, GLint width, GLint height,
 			const GLint attribList[])
 {
+ /* fxMesaCreateContext() handles fxQueryHardware() error returns */
  int res = fxBestResolution(width, height);
-
- if (res == -1) {
-    return NULL;
- }
-
  return fxMesaCreateContext(win, res, GR_REFRESH_60Hz, attribList);
 }
 
